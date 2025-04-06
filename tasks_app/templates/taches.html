@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mes Tâches</title>
+    <style>
+        /* Reset de quelques styles de base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Conteneur principal */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #333;
+        }
+
+        /* Liste des tâches */
+        .tasks-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: space-between;
+        }
+
+        /* Style pour les cartes de tâche */
+        .task-card-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: space-between;
+        }
+
+        .task-card {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .task-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .task-header {
+            background-color: #2c3e50;
+            color: #fff;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .task-header h2 {
+            font-size: 1.5rem;
+        }
+
+        .task-body {
+            padding: 15px;
+            background-color: #f9f9f9;
+        }
+
+        .task-body p {
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+
+        .task-footer {
+            padding: 10px 15px;
+            background-color: #f4f7fa;
+            text-align: center;
+        }
+
+        .task-footer span {
+            display: inline-block;
+            margin: 0 5px;
+            padding: 5px 10px;
+            background-color: #2c3e50;
+            color: #fff;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+
+        /* Styles pour les statuts */
+        .statut {
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 5px;
+            text-transform: capitalize;
+        }
+
+        .statut.commence {
+            background-color: #f39c12;
+            color: #fff;
+        }
+
+        .statut.en_cours {
+            background-color: #3498db;
+            color: #fff;
+        }
+
+        .statut.termine {
+            background-color: #2ecc71;
+            color: #fff;
+        }
+
+        .statut.en_retard {
+            background-color: #e74c3c;
+            color: #fff;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .tasks-list {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .task-card {
+                width: 100%;
+                max-width: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Bienvenue, {{ user.username }}!</h1> <!-- Afficher le nom de l'utilisateur connecté -->
+        </header>
+
+        <section class="tasks-list">
+            {% if tasks %}
+                <div class="task-card-container">
+                    {% for task in tasks %}
+                        <div class="task-card">
+                            <div class="task-header">
+                                <h2>{{ task.name }}</h2>
+                            </div>
+                            <div class="task-body">
+                                <p><strong>Date de début:</strong> {{ task.start_date }}</p>
+                                <p><strong>Date de fin souhaitée:</strong> {{ task.end_date }}</p>
+                                <p><strong>Statut:</strong> <span class="statut {{ task.statut }}">{{ task.get_statut_display }}</span></p>
+                            </div>
+                            <div class="task-footer">
+                                <strong>Utilisateurs:</strong>
+                                {% for user in task.users.all %}
+                                    <span>{{ user.username }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p>Aucune tâche disponible.</p>
+            {% endif %}
+        </section>
+    </div>
+</body>
+</html>
