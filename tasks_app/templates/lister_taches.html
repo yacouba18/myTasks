@@ -1,0 +1,93 @@
+{% extends "base.html" %} 
+{% block content %}
+<div class="container">
+  <style>
+    /* Styles pour la table */
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+
+    .table th,
+    .table td {
+      padding: 12px;
+      border: 1px solid #ccc;
+    }
+
+    .table th {
+      background-color: #f2f2f2;
+      text-align: left;
+      font-weight: bold;
+    }
+
+    .table tbody tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    /* Styles pour les boutons */
+    .btn {
+      display: inline-block;
+      padding: 10px 16px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn:hover {
+      background-color: #0056b3;
+    }
+
+    .btn a {
+      color: #fff;
+      text-decoration: none;
+    }
+
+    .btn:focus {
+      outline: none;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+  </style>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Nom de la tâche</th>
+        <th scope="col">Date de création</th>
+        <th scope="col">Date d'échéance</th>
+        <th scope="col">Modifier la tâche</th>
+        <th scope="col">Supprimer la tâche</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for tache in taches %}
+      <tr>
+        <td>{{ tache.name }}</td>
+        <td>{{ tache.start_date }}</td>
+        <td>{{ tache.end_date }}</td>
+        <td>
+          <button class="btn">
+            <a href="{% url 'modif_tache' tache.id %}" style="color: #fff; text-decoration: none">Modifier</a>
+          </button>
+        </td>
+        <td>
+          <form method="POST" action="{% url 'supprimer_tache' tache.id %}">
+            {% csrf_token %}
+            <button type="submit" class="btn">Supprimer</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
